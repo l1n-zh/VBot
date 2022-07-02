@@ -1,2 +1,4 @@
 Zfoo.py
 *.pyc
+zBar.py
+.env
