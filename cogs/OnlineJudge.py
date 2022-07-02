@@ -21,27 +21,37 @@ class OnlineJudge(Cog):
             if link:
                 problem = Problem(link.group(0), F)
                 embed = Embed.from_dict(problem.to_embed_dict())
-                Saying.set_footer(embed, 1)
+                set_footer(embed, 1)
                 await msg.reply(embed = embed)
-    
+
+
     @commands.Cog.listener()
     async def on_error(self, ctx: Context, error: CommandInvokeError):
         if(isinstance(error,CommandInvokeError)):
             print(error.original)
 
+
     @commands.command(aliases=['zj'])
     async def zerojudge(self, ctx: Context, arg: str):
         problem = Problem(arg, ZeroJudgeFormatter)
         embed = Embed.from_dict(problem.to_embed_dict())
-        Saying.set_footer(embed, 1)
+        set_footer(embed, 1)
         await ctx.send(embed = embed)
     
+
     @commands.command(aliases=['rj'])
     async def ryanjudge(self, ctx: Context, arg:str):
         problem = Problem(arg, RyanJudgeFormatter)
         embed = Embed.from_dict(problem.to_embed_dict())
-        Saying.set_footer(embed, 1)
+        set_footer(embed, 1)
         await ctx.send(embed = embed)
+
+
+
+def set_footer(embed: Embed, index: int = 1):
+    embed.set_footer(text = ': ' + Saying.random_get(index), icon_url='https://media.discordapp.net/attachments/933779977638400101/949148193076183100/IMG_4208.png')
+    return embed
+
 
 def setup(bot: commands.Bot):
     bot.add_cog(OnlineJudge(bot))
