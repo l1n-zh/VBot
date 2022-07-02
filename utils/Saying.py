@@ -11,9 +11,11 @@ class Saying:
         with open(fn, encoding='utf-8') as file:
             sayings.append(load(file))
 
+
     @classmethod
     def random_get(cls, index: int = 1):
         return choice(cls.sayings[index])
+    
     
     @classmethod
     def set_footer(cls, embed: Embed, index: int = 1):

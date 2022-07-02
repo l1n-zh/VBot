@@ -2,10 +2,7 @@ from bs4 import element
 
 
 def parse(content: element.Tag) -> str:
-    return _parse(content)
 
-
-def _parse(content: element.Tag):
     res = ""
     contents = content.children
     for elem in contents:

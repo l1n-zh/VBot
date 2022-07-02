@@ -2,6 +2,7 @@ from .ZeroJudgeFormatter import ZeroJudgeFormatter
 from .Parser import parse
 
 class RyanJudgeFormatter(ZeroJudgeFormatter):
+
     url = r'ryanjudge.servebeer.com/ShowProblem?problemid='
     index_pattern = r'[a-h]\d{3}'
 
