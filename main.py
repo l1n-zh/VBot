@@ -27,5 +27,3 @@ if __name__ == '__main__':
 
 token = environ.get("TOKEN") 
 bot.run(token)  # Starts the bot
-
-bot.run("OTUwMzgxODc0ODI2NjAwNDQ4.GX20Mx.S5BW8yfUAfl26hYEjPYgciI2Glw8inigTrKFT0")
