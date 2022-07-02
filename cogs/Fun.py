@@ -1,14 +1,21 @@
 from discord.ext import commands
-from discord.ext.commands.context import Context
-from assets.Assets import Assets
-from utils import *
+from discord.ext.commands import Context
+from discord import Embed, File, Message
+
+from asyncio import sleep
+from asyncio import TimeoutError as Timeout
+
 import requests
 from io import BytesIO
 from PIL import Image
-from discord import Embed, File
+
 from random import choice
-from asyncio import sleep
-from asyncio import TimeoutError as Timeout
+from re import search
+from itertools import chain
+
+from assets.Assets import Assets
+from utils import *
+
 
 class Fun(Cog):
 
@@ -22,9 +29,16 @@ class Fun(Cog):
                     self.emojis[emoji.name] = str(emoji)
 
         self.words = []
-        for fn in ('easy','medium'):
+        for fn in ('easy', 'medium'):
             with open(f'assets/words/{fn}.txt') as f:
                 self.words.append([l[:-1] for l in f.readlines()])
+
+    @commands.Cog.listener()
+    async def on_message(self, message:Message):
+        if search("高粱|<@859231400071135262>", message.content):
+            await message.channel.send(
+                embed = Embed().set_image(url = Assets.picture["dan"]),
+                delete_after = 0.3)
 
     @commands.command(aliases=['bt'])
     async def bigtext(self, ctx: Context, text:str):
@@ -44,54 +58,64 @@ class Fun(Cog):
             await ctx.send(embed = e)
             
         else: print(r.status_code)
-    
+
 
     @commands.command(aliases=['wd'])
     async def wordle(self, ctx: Context, difficulty:str = 'easy', timeout:int = 30):
         emojis = self.emojis
-
-        timeout =  min((5,10,20,30),key = lambda i:abs(i-timeout))
-        words = self.words[difficulty == 'hard']
-        answer = choice(words)
-
-        print(answer)
-        W = emojis['Wa']
-        embed = Embed(title = "點擊符號開始遊戲")
+        
         game_area = await ctx.message.create_thread(name=f'{ctx.author.display_name} 的 WordleGame')
         row = emojis['empty'] * 5
+        embed = Embed(title = "點擊符號開始遊戲")
+
         game = await game_area.send(f'{row}\n'*5, embed=embed)
+        W = emojis['Wa']
         await game.add_reaction(W)
 
         try:
             await self.bot.wait_for(
                 'reaction_add',
-                check = lambda r, u:all([
+                check = lambda r, u: all([
                     u.id == ctx.author.id,
                     str(r) == W
                 ]),
-                timeout=20)
+                timeout = 20)
         except Timeout:
             await game_area.delete()
             return
         else:
             await game.clear_reactions()
+
+        timeout =  min((5,10,20,30), key = lambda i:abs(i-timeout))
+        answer = choice(self.words[difficulty == 'hard'])
         record = ''
         def get_result(guess):
             nonlocal record
-            guess = str(guess).upper()
-            result = []
+            result = ''
+            answer_record = list(answer)
+            guess = list(str(guess).upper())
+            status_list = [0]*5
+
             for i in range(5):
-                char = guess[i]
-                status = (char == answer[i]) + (char in answer)
+                if(answer_record[i] == guess[i]):
+                    status_list[i] = 2
+                    answer_record[i] = ''
+
+            for i in range(5):
+                if not status_list[i]:
+                    if(guess[i] in answer_record):
+                        status_list[i] = 1
+                        answer_record[i] = ''
+                    
+            for status, char in zip(status_list, guess):
                 record += '⬛🟨🟩'[status]
-                result.append(emojis[ char + 'cba'[status] ])
+                result += emojis[ char + 'cba'[status] ]
             record += '\n'
-            return ''.join(result)
+            return result
 
         set_author = lambda e: e.set_author(name = "Wordle Game", icon_url="https://cdn.discordapp.com/attachments/954768007597527093/954903092351098910/wordle.png")
 
         times = 1
-        
 
         while True:
             
@@ -105,7 +129,7 @@ class Fun(Cog):
                     guess = await self.bot.wait_for(
                         'message',
                         check = lambda m:all([
-                            m.content.upper() in words,
+                            m.content.upper() in chain(*self.words),
                             m.channel == game_area,
                             m.author.id == ctx.author.id
                         ]),
@@ -127,7 +151,6 @@ class Fun(Cog):
                     set_author(e)
                     await game.edit(embed = e)
             else:
-                print('awa')
                 e = Embed(title = f'正確答案: {answer}')
                 break
         
@@ -136,5 +159,8 @@ class Fun(Cog):
 
         await sleep(10)
         await game_area.delete()
+
+
+
 def setup(bot: commands.Bot):
     bot.add_cog(Fun(bot))
