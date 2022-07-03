@@ -19,7 +19,7 @@ class Generator:
         self.height = 0
 
     def add(self, name, color, avatar_url, message, time):
-        self.height += (message.count("\n")*50 or 50) + 130
+        self.height += (message.count("\n")*100 or 100) + 300
         if not color.value : color = "white"
         message = parse(message)
         self.html += (
@@ -37,6 +37,6 @@ class Generator:
 
 
     def generate(self):
-        hti = Html2Image(size=(1200, self.height), output_path="./buffer")
+        hti = Html2Image(size=(2000, self.height), output_path="./buffer")
         with open("cogs/screenshot_generator/style.css") as stylesheet:
             hti.screenshot(html_str=self.html, css_str=stylesheet, save_as = f"screenshot{self.img_id}.png")

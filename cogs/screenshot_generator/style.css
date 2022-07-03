@@ -1,63 +1,64 @@
 .discord {
   background-color: #36393f;
-  width: 1000px;
-  padding: 20px;
+  width: 2000px;
+  padding: 40px;
   display: flex;
   word-break: break-word;
-  font-size: 35px;
+  font-size: 70px;
   font-family: sans-serif;
 }
 
 .avatar {
-  width: 80px;
-  height: 80px;
+  width: 160px;
+  height: 160px;
   border-radius: 50%;
-  margin-right: 20px;
+  margin-right: 40px;
 }
 
 .time {
-  font-size: 24px;
-  padding-bottom: 10px;
+  position:relative;
+  bottom: 17px;
+  font-size: 48px;
   color: #a3a6aa;
 }
 
 .message {
   color: #dcddde;
-  line-height: 50px;
+  line-height: 100px;
 }
 
 .name {
-  margin-right: 6px;
-  max-width: 700px;
-  display : inline-block;
-  white-space : nowrap;
+  margin-right: 12px;
+  max-width: 1400px;
+  display: inline-block;
+  white-space: nowrap;
   overflow: hidden;
-  text-overflow : ellipsis;
+  text-overflow: ellipsis;
 }
 
 code {
   font-family: monospace;
   background-color: #2f3136;
-  border-radius: 5px;
-  font-size: 33px;
-  padding: 2px;
+  border-radius: 10px;
+  font-size: 66px;
+  padding: 4px;
 }
 
 .d-spoiler {
   background-color: #dcddde20;
-  border-radius: 5px;
+  border-radius: 10px;
 }
 
 blockquote {
-  border-left: 7px solid #dcddde20;
-  border-radius: 7px;
-  padding-left: 15px;
+  border-left: 15px solid #dcddde20;
+  border-radius: 15px;
+  padding-left: 30px;
   margin: 0;
 }
 
 .d-mention {
   color: #dee0fc;
   background-color: #5865f24c;
-  border-radius: 5px;
-  padding: 2px;
+  border-radius: 10px;
+  padding: 4px;
 }
