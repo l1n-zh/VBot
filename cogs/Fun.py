@@ -51,7 +51,8 @@ class Fun(Cog):
         inputs = "\n" + inputs
         user_ids = findall(r"\n<@([0-9]+)> *:", inputs)
         messages = split(r"\n<@[0-9]+> *:", inputs)
-        generator = Generator(ctx.message.id)
+        img_id = ctx.message.id
+        generator = Generator(img_id)
         fake = Faker()
         Faker.seed()
         time = fake.date_between(start_date='-2y', end_date='today')
@@ -80,7 +81,7 @@ class Fun(Cog):
         embed.set_image(url="https://c.tenor.com/5StiWpbuWx8AAAAi/%E6%9D%B1%E6%96%B9-%E5%B0%91%E5%A5%B3%E8%AE%80%E5%8F%96%E4%B8%AD.gif")
         reply = await ctx.send(embed = embed)
         generator.generate()
-        tmp = await self.backstage.send(file=File(f"buffer/screenshot{ctx.message.id}.png"))
+        tmp = await self.backstage.send(file=File(f"buffer/screenshot{img_id}.png"))
         embed.set_image(url = tmp.attachments[0].url)
         embed.title = f"來自{time}的截圖"
         await reply.edit(embed = embed)
