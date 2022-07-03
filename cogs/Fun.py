@@ -10,11 +10,17 @@ from io import BytesIO
 from PIL import Image
 
 from random import choice
-from re import search
+from re import findall, search, split, DOTALL, MULTILINE
 from itertools import chain
 
-from assets.Assets import Assets
 from utils import *
+from assets import Assets
+
+from .screenshot_generator.Generator import Generator
+from time import localtime, strftime
+from faker import Faker
+
+
 
 
 class Fun(Cog):
@@ -40,6 +46,45 @@ class Fun(Cog):
                 embed = Embed().set_image(url = Assets.picture["dan"]),
                 delete_after = 0.3)
 
+    @commands.command(aliases=['ss'])
+    async def screenshot(self, ctx: Context, *, inputs):
+        inputs = "\n" + inputs
+        user_ids = findall(r"\n<@([0-9]+)> *:", inputs)
+        messages = split(r"\n<@[0-9]+> *:", inputs)
+        generator = Generator(ctx.message.id)
+        fake = Faker()
+        Faker.seed()
+        time = fake.date_between(start_date='-2y', end_date='today')
+        time = time.strftime("%Y/%m/%d")
+        if(messages[0]): user_ids.insert(0,choice(ctx.guild.members).id)
+        else: del messages[0]
+        for uid, message in zip(user_ids,messages):
+            while message[0] in ["\n"," ","　"]: message = message[1::]
+            member = await ctx.guild.fetch_member(uid)
+            if(member):
+                generator.add(
+                    member.display_name,
+                    member.color,
+                    member.display_avatar.url,
+                    message,
+                    time)
+            else:
+                user = await self.bot.fetch_user(uid)
+                generator.add(
+                    user.name,
+                    "white",
+                    user.display_avatar.url,
+                    message,
+                    time)
+        embed = Embed(title="請稍後..")
+        embed.set_image(url="https://c.tenor.com/5StiWpbuWx8AAAAi/%E6%9D%B1%E6%96%B9-%E5%B0%91%E5%A5%B3%E8%AE%80%E5%8F%96%E4%B8%AD.gif")
+        reply = await ctx.send(embed = embed)
+        generator.generate()
+        tmp = await self.backstage.send(file=File(f"buffer/screenshot{ctx.message.id}.png"))
+        embed.set_image(url = tmp.attachments[0].url)
+        embed.title = f"來自{time}的截圖"
+        await reply.edit(embed = embed)
+        
     @commands.command(aliases=['bt'])
     async def bigtext(self, ctx: Context, text:str):
         r = requests.get(f'https://www.moedict.tw/{text}.png')
@@ -48,7 +93,7 @@ class Fun(Cog):
             img = img.crop(img.getbbox())
             
             fp = BytesIO()
-            img.save(fp,format="PNG")
+            img.save(fp, format="PNG")
             fp.seek(0)
             msg = await self.backstage.send(file = File(fp, filename = f"{text}.png"))
             e = Embed()
