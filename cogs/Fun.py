@@ -9,7 +9,7 @@ import requests
 from io import BytesIO
 from PIL import Image
 
-from random import choice
+from random import choice, randint
 from re import findall, search, split, DOTALL, MULTILINE
 from itertools import chain
 
@@ -41,10 +41,15 @@ class Fun(Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message:Message):
-        if search("高粱|<@859231400071135262>", message.content):
+        count = len(findall("高粱|<@859231400071135262>", message.content))
+        if count:
             await message.channel.send(
                 embed = Embed().set_image(url = Assets.picture["dan"]),
-                delete_after = 0.3)
+                delete_after = 0.3*count)
+
+    @commands.command()
+    async def talk(self, ctx: Context):
+        await ctx.reply("汪"*randint(1,9)+"!"*randint(0,3))
 
     @commands.command(aliases=['ss'])
     async def screenshot(self, ctx: Context, *, inputs):
@@ -82,6 +87,7 @@ class Fun(Cog):
         reply = await ctx.send(embed = embed)
         generator.generate()
         tmp = await self.backstage.send(file=File(f"buffer/screenshot{img_id}.png"))
+        generator.delete_img()
         embed.set_image(url = tmp.attachments[0].url)
         embed.title = f"來自{time}的截圖"
         await reply.edit(embed = embed)
