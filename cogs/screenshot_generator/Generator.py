@@ -1,11 +1,12 @@
 from html2image import Html2Image
 import socket
-
+from os import system, remove
 
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 HOST = 'localhost'
-PORT = 33333
+PORT = 33334
 server_addr = (HOST, PORT)
+system("cd ./markdown-parser && node parser.js")
 
 def parse(message:str) -> str:
     s.sendto(message.encode(), server_addr)
@@ -40,3 +41,6 @@ class Generator:
         hti = Html2Image(size=(2000, self.height), output_path="./buffer")
         with open("cogs/screenshot_generator/style.css") as stylesheet:
             hti.screenshot(html_str=self.html, css_str=stylesheet, save_as = f"screenshot{self.img_id}.png")
+    
+    def delete_img(self):
+        remove(f"./buffer/screenshot{self.img_id}.png")
