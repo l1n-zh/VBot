@@ -21,8 +21,6 @@ from time import localtime, strftime
 from faker import Faker
 
 
-
-
 class Fun(Cog):
 
     @commands.Cog.listener()
@@ -46,10 +44,6 @@ class Fun(Cog):
             await message.channel.send(
                 embed = Embed().set_image(url = Assets.picture["dan"]),
                 delete_after = 0.3*count)
-
-    @commands.command()
-    async def talk(self, ctx: Context):
-        await ctx.reply("汪"*randint(1,9)+"!"*randint(0,3))
 
     @commands.command(aliases=['ss'])
     async def screenshot(self, ctx: Context, *, inputs):

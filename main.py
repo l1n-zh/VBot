@@ -6,13 +6,13 @@ from random import choices
 from os import environ
 
 intents = Intents.all()
-bot = commands.Bot(command_prefix='$', intents=intents)
+bot = commands.Bot(command_prefix='-', intents=intents)
 
 @bot.event
 async def on_ready():
     print(f"We have logged in as {bot.user}")
-    activities = (('小黃本', 3), ('文林國小的ㄌㄌ們', 3), ('你的屁股', 3), ('汪汪汪汪汪汪汪汪汪汪', 2),
-                  ('cosplay梅花鹿', 0), ('生態池的鱷魚', 0), ('獨角獸', 0),  ('你', 0))
+    activities = (('你', 3), ('化學講義', 3), ('英文雜誌', 3), ('Spotify', 2),
+                  ('Golf Battle', 0), ('象棋', 0), ('五子棋', 0))
     while not bot.is_closed():
         name, type = choices(activities)[0]
         await bot.change_presence(activity=Activity(name=name, type=type))
