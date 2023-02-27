@@ -3,7 +3,11 @@ from discord.ext import commands
 import glob
 from asyncio import sleep
 from random import choices
-from os import environ
+from os import getenv
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 intents = Intents.all()
 bot = commands.Bot(command_prefix='-', intents=intents)
@@ -25,5 +29,5 @@ if __name__ == '__main__':
         bot.load_extension('cogs.' + path[filename])
 
 
-token = environ.get("TOKEN") 
+token = getenv("TOKEN") 
 bot.run(token)  # Starts the bot
