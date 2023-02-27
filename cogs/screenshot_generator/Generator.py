@@ -1,12 +1,14 @@
 from html2image import Html2Image
 import socket
-from os import system, remove
+from os import remove
+import subprocess
+
 
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 HOST = 'localhost'
 PORT = 33334
 server_addr = (HOST, PORT)
-system("cd ./markdown-parser && node parser.js")
+subprocess.Popen("node ./markdown-parser/parser.js &")
 
 def parse(message:str) -> str:
     s.sendto(message.encode(), server_addr)
