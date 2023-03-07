@@ -15,6 +15,7 @@ from itertools import chain
 
 from utils import *
 from assets import Assets
+from .cn_word_detector.detector import detect_cn_words
 
 from .screenshot_generator.Generator import Generator
 from time import localtime, strftime
@@ -44,6 +45,13 @@ class Fun(Cog):
             await message.channel.send(
                 embed = Embed().set_image(url = Assets.picture["dan"]),
                 delete_after = 0.3*count)
+        
+        detection = detect_cn_words(message.content)
+        if detection:
+            await message.channel.send(
+                embed = detection
+            )
+
 
     @commands.command(aliases=['ss'])
     async def screenshot(self, ctx: Context, *, inputs):
