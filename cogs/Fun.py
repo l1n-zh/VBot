@@ -48,7 +48,7 @@ class Fun(Cog):
         
         detection = detect_cn_words(message.content)
         if detection:
-            await message.channel.send(
+            await message.reply(
                 embed = detection
             )
 
