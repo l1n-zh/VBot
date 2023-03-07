@@ -13,12 +13,6 @@ with (path/'cn.txt').open(encoding='utf-8') as f:
 
 with (path/'image_urls.txt').open(encoding='utf-8') as f:
     image_urls = f.read().split('\n')
-    
-
-
-def test():
-    detect_cn_words("高清洗面奶")
-    # detect_cn_word("布須曼人工智慧")
 
 
 def detect_cn_words(content):
@@ -37,10 +31,6 @@ def detect_cn_words(content):
             correction += f'~~{word_cn}~~ -> {word_tw}\n'
         embed = Embed(title='⚠️⚠️支語警告⚠️⚠️', description=alert)
         embed.add_field(name="請使用正確詞彙", value=correction)
-        embed.set_thumbnail(url = choice(image_urls))
         embed.set_image(url = choice(image_urls))
         return embed
 
-                
-
-# a, b
