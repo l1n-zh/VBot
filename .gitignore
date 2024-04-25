@@ -3,4 +3,5 @@ Zfoo.py
 zBar.py
 .env
 buffer/*
+node_modules
 markdown-parser/node_modules

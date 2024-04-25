@@ -8,7 +8,7 @@ s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 HOST = 'localhost'
 PORT = 33334
 server_addr = (HOST, PORT)
-subprocess.Popen("node ./markdown-parser/parser.js &")
+subprocess.run(["node", "./markdown-parser/parser.js"])
 
 def parse(message:str) -> str:
     s.sendto(message.encode(), server_addr)
