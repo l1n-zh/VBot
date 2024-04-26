@@ -10,6 +10,7 @@ html2image = "^2.0.4.3"
 beautifulsoup4 = "^4.12.3"
 ping3 = "^4.0.8"
 python-dotenv = "^1.0.1"
+tldextract = "^5.1.2"
 
 
 [build-system]
