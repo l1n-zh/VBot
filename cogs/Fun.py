@@ -15,7 +15,7 @@ from itertools import chain
 
 from utils import *
 from assets import Assets
-from .cn_word_detector.detector import detect_cn_words
+from .cn_word_detector.Detector import detect_cn_words
 
 from .screenshot_generator.Generator import Generator
 from time import localtime, strftime
