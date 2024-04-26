@@ -1,7 +1,7 @@
 from tldextract import extract
 from enum import Enum
 from .FileHandler import read, write, FILE_PATH
-from .DomainStatusChecker import get_status
+from .DomainStatusChecker import get_status, record_domains_status
 from typing import List, Dict
 
 
@@ -48,7 +48,7 @@ async def add_domain(uid, target) -> RETURNCODE:
     return RETURNCODE.SUCCESS
 
 
-def remove_domain(uid: str, domain: str) -> RETURNCODE:
+async def remove_domain(uid: str, domain: str) -> RETURNCODE:
     data = read(FILE_PATH.user_settings)
     domains = data.get(uid)
     try:
@@ -57,4 +57,5 @@ def remove_domain(uid: str, domain: str) -> RETURNCODE:
         return RETURNCODE.NOT_EXIST
     else:
         write(FILE_PATH.user_settings, data)
+        await record_domains_status()
         return RETURNCODE.SUCCESS

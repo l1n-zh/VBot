@@ -69,7 +69,7 @@ class RemoveDomainView(View):
         async def callback(interaction: Interaction):
             target_domain = interaction.data['values'][0]
             uid = str(interaction.user.id)
-            if remove_domain(uid, target_domain) == RETURNCODE.SUCCESS:
+            if await remove_domain(uid, target_domain) == RETURNCODE.SUCCESS:
                 await interaction.response.send_message(f"成功移除 `{target_domain}`" ,ephemeral=True,delete_after=2)
                 await self.edit_original_response(embeds=await create_domains_status_embeds(uid))
             else:
